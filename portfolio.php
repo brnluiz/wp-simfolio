@@ -57,21 +57,41 @@ class SimplePortfolio {
   * Registers a Meta Box on our Contact Custom Post Type, called 'Contact Details'
   */
   function register_meta_boxes() {
-    add_meta_box( 'project-photos',      // HTML ID
-      'Project Photos',                  // Title
-      array( $this, 'photos_meta_box' ),  // Callback
-      'portfolio-project',                // Allowed screens
-      'normal',                           // Context to appear: normal, advanced, side
-      'high'                              // Priority that it should be shown
+    /**
+    * Add each meta box config below, as the follow
+    *  'metabox' => array(
+    *    'id' => 'HTML ID', // HTML ID
+    *    'title' => 'META BOX TITLE', // Meta box title
+    *    'callback' => array( $this, 'CALLBACK FUNCTION NAME' ),
+    *    'screens' => 'ENABLED POST TYPES',
+    *    'context' => 'CONTEXT TO SHOW',
+    *    'priority' => 'PRIORITY COMPARED TO OTHER BOXES'
+    *  )
+    */
+    $meta_boxes = array(
+      'photos' => array(
+        'id' => 'project-photos', // HTML ID
+        'title' => 'Project Photos', // Meta box title
+        'callback' => array( $this, 'photos_meta_box' ), // Function callback
+        'screens' => 'portfolio-project', // Enabled post types
+        'context' => 'normal', // Context to show
+        'priority' => 'high' // Priority compared to other meta boxes
+      ),
+      'details' => array(
+        'id' => 'project-details',
+        'title' => 'Project Details',
+        'callback' => array( $this, 'description_meta_box' ),
+        'screens' => 'portfolio-project',
+        'context' => 'normal',
+        'priority' => 'high'
+      )
     );
 
-    add_meta_box( 'project-description',      // HTML ID
-      'Project Details',                  // Title
-      array( $this, 'description_meta_box' ),  // Callback
-      'portfolio-project',                // Allowed screens
-      'normal',                           // Context to appear: normal, advanced, side
-      'high'                              // Priority that it should be shown
-    );
+    // Adds all meta boxes configured at $meta_boxes
+    foreach ($meta_boxes as $box) {
+      add_meta_box( $box['id'], $box['title'], $box['callback'],
+        $box['screens'], $box['context'], $box['priority'] );
+    }
   }
 
   /**
@@ -81,6 +101,7 @@ class SimplePortfolio {
   */
   function description_meta_box($post) {
     $description = get_post_meta( $post->ID, '_project_description', true );
+
     require_once 'views/description.php';
   }
 
@@ -124,8 +145,7 @@ class SimplePortfolio {
     // OK to save meta data
     $description = sanitize_text_field( $_POST['project_description'] );
     update_post_meta( $post_id, '_project_description', $description );
-
-}
+  }
 }
 
 
