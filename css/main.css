@@ -22,7 +22,7 @@
 }
 
 .project-photo img{
-  width: 100%;
+  background: #fff;
   display: block;
   border: 1px solid #ccc;
 }

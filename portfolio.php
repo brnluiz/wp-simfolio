@@ -15,6 +15,9 @@ class SimplePortfolio {
     add_action( 'admin_enqueue_scripts', array( $this, 'load_assets' ) );
     add_action( 'add_meta_boxes', array( $this, 'register_meta_boxes' ) );
     add_action( 'save_post', array( $this, 'save_meta_boxes' ) );
+
+    add_filter( 'manage_edit-portfolio-project_columns', array( $this, 'add_table_columns' ) );
+    add_action( 'manage_portfolio-project_posts_custom_column', array( $this, 'output_table_columns_data'), 10, 2 );
 	}
 
   public function load_assets() {
@@ -176,6 +179,37 @@ class SimplePortfolio {
     update_post_meta( $post_id, '_project_description', $description );
     update_post_meta( $post_id, '_project_photos', $photos );
     update_post_meta( $post_id, '_project_main_photo', $main_photo );
+  }
+
+  /**
+  * Adds table columns to the Contacts WP_List_Table
+  *
+  * @param array $columns Existing Columns
+  * @return array New Columns
+  */
+  function add_table_columns( $columns ) {
+
+      $columns['main_photo'] = __( 'Main Photo', 'simple-portfolio' );
+
+      return $columns;
+  }
+
+  /**
+  * Outputs our Contact custom field data, based on the column requested
+  *
+  * @param string $columnName Column Key Name
+  * @param int $post_id Post ID
+  */
+  function output_table_columns_data( $columnName, $post_id ) {
+    $fieldJson = get_post_meta( $post_id, '_project_main_photo', true );
+    $field = json_decode($fieldJson);
+
+    if ( 'main_photo' == $columnName ) {
+        echo '<img src="' . $field->sizes->thumbnail->url .'" width="'. $field->sizes->thumbnail->width . '" height="' . $field->sizes->thumbnail->height . '" />';
+    } else {
+        // Output field
+        echo $field;
+    }
   }
 }
 

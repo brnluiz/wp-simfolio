@@ -1,0 +1,4 @@
+- Renaming the titles on "Project Photos" is not saving it to the JSON
+- Implement: default photo size
+- Implement: photo reorder
+- Implement: pass data to Wordpress Media Manager
