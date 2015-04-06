@@ -1,0 +1,33 @@
+.project-photos {
+  margin-top: 10px;
+}
+
+.project-photo {
+  width: auto;
+  width: 27%;
+  padding: 10px 3% 10px 2%;
+  display: inline-block;
+  text-align: center;
+  margin: 1px;
+  background: #fafafa;
+  border: 3px solid #E8E8E8;
+}
+
+.project-photo img{
+  width: 100%;
+  display: block;
+  border: 1px solid #ccc;
+}
+.project-photo button{
+  width: 100%;
+  display: block;
+  margin: 5px 0 0 0 !important;
+}
+.project-photo h3{
+  display: block
+}
+
+.project-main-photo {
+  background: #2EA2CC;
+  border: 3px solid rgb(0, 116, 162);
+}

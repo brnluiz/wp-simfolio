@@ -12,9 +12,32 @@
 class SimplePortfolio {
 	function __construct() {
 		add_action( 'init', array( $this, 'register_custom_post_type' ) );
+    add_action( 'admin_enqueue_scripts', array( $this, 'load_assets' ) );
     add_action( 'add_meta_boxes', array( $this, 'register_meta_boxes' ) );
     add_action( 'save_post', array( $this, 'save_meta_boxes' ) );
 	}
+
+  public function load_assets() {
+    // Load the media-upload scripts and styles
+    wp_enqueue_media();
+
+    // Load CSS
+    wp_enqueue_style( 'bootstrap-style', plugins_url( 'css/grid.css', __FILE__ ) );
+    wp_enqueue_style( 'wpamin-style', plugins_url( 'css/main.css', __FILE__ ) );
+
+    // Load Angular
+    wp_enqueue_script( 'angular', plugins_url( 'bower_components/angularjs/angular.js', __FILE__ ), array( 'jquery' ) );
+
+    $js = array(
+      'app' => 'js/app.js',
+      // "mainctrl" => 'app/scripts/controllers/main.js',
+    );
+
+    // Load each js script from $js
+    foreach($js as $handle => $path) {
+      wp_enqueue_script('wpamin-' . $handle, plugin_dir_url(__FILE__) . $path, array('jquery', 'angular', 'media-upload','thickbox'));
+    }
+  }
 
   public function register_custom_post_type() {
     register_post_type( 'portfolio-project', array(
@@ -110,10 +133,12 @@ class SimplePortfolio {
     wp_enqueue_media();
 
     // Load the scripts for upload images
-    wp_enqueue_script( 'photojs', plugins_url( 'js/photos.js', __FILE__ ), array('jquery','media-upload','thickbox') );
+    // wp_enqueue_script( 'photojs', plugins_url( 'js/photos.js', __FILE__ ), array('jquery','media-upload','thickbox') );
+
+    $photos = get_post_meta( $post->ID, '_project_photos', true );
 
     // Load meta box plugin
-    require_once 'views/photos.php';
+    require_once "views/photos.php";
   }
 
   /**
