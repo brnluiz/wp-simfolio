@@ -77,7 +77,7 @@ class SimplePortfolio {
   }
 
   /**
-  * Registers a Meta Box on our Contact Custom Post Type, called 'Contact Details'
+  * Registers a Meta Box on our Contact Custom Post Type, called 'Contact Description'
   */
   function register_meta_boxes() {
     /**
@@ -100,9 +100,9 @@ class SimplePortfolio {
         'context' => 'normal', // Context to show
         'priority' => 'high' // Priority compared to other meta boxes
       ),
-      'details' => array(
-        'id' => 'project-details',
-        'title' => 'Project Details',
+      'description' => array(
+        'id' => 'project-description',
+        'title' => 'Project Description',
         'callback' => array( $this, 'description_meta_box' ),
         'screens' => 'portfolio-project',
         'context' => 'normal',
@@ -118,7 +118,7 @@ class SimplePortfolio {
   }
 
   /**
-  * Output a Contact Details meta box
+  * Output a Contact Description meta box
   *
   * @param WP_Post $post WordPress Post object
   */
@@ -135,7 +135,8 @@ class SimplePortfolio {
     // Load the scripts for upload images
     // wp_enqueue_script( 'photojs', plugins_url( 'js/photos.js', __FILE__ ), array('jquery','media-upload','thickbox') );
 
-    $photos = get_post_meta( $post->ID, '_project_photos', true );
+    $photos     = get_post_meta( $post->ID, '_project_photos', true );
+    $main_photo = get_post_meta( $post->ID, '_project_main_photo', true );
 
     // Load meta box plugin
     require_once "views/photos.php";
@@ -169,7 +170,12 @@ class SimplePortfolio {
 
     // OK to save meta data
     $description = sanitize_text_field( $_POST['project_description'] );
+    $photos      = sanitize_text_field( $_POST['project_photos'] );
+    $main_photo  = sanitize_text_field( $_POST['project_main_photo'] );
+
     update_post_meta( $post_id, '_project_description', $description );
+    update_post_meta( $post_id, '_project_photos', $photos );
+    update_post_meta( $post_id, '_project_main_photo', $main_photo );
   }
 }
 

@@ -1,5 +1,10 @@
 .project-photos {
   margin-top: 10px;
+  padding: 0 12px 12px
+}
+#project-photos .inside, #project-description .inside{
+  margin: 0;
+  padding: 0;
 }
 
 .project-photo {
@@ -12,6 +17,9 @@
   background: #fafafa;
   border: 3px solid #E8E8E8;
 }
+#no-photo {
+  text-align: center;
+}
 
 .project-photo img{
   width: 100%;
@@ -22,6 +30,12 @@
   width: 100%;
   display: block;
   margin: 5px 0 0 0 !important;
+}
+.project-photo input {
+  font-size: 12px;
+  width: 100%;
+  display: block;
+  margin-top: 2px;
 }
 .project-photo h3{
   display: block

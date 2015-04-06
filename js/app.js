@@ -7,8 +7,22 @@ app.controller('PortfolioAdminController', ['$scope', function($scope) {
   $scope.photosJson = null;
   $scope.file_frame = null;
 
+  $scope.$watch('photosJson', function() {
+    jQuery('#project_photos').val($scope.photosJson);
+  });
+  $scope.$watch('mainPhoto', function() {
+    jQuery('#project_main_photo').val($scope.mainPhoto);
+  });
+
+  $scope.initParams = function() {
+    $scope.photos     = getPhotosJson();
+    $scope.photosJson = JSON.stringify($scope.photos);
+    $scope.mainPhoto  = getMainPhotoId();
+  }
+  $scope.initParams();
+
   $scope.setMainPhoto = function($event, photo) {
-    $scope.mainPhoto = photo;
+    $scope.mainPhoto = photo.id;
     $event.preventDefault();
   }
 
@@ -51,10 +65,6 @@ app.controller('PortfolioAdminController', ['$scope', function($scope) {
       var save_data = JSON.stringify(selection.toJSON());
       $scope.photos = selection.toJSON();
       $scope.photosJson = save_data;
-
-      // selection.map( function( attachment ) {
-      //   attachment = attachment.toJSON();
-      // });
 
       $scope.$digest();
     });
