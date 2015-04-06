@@ -1,6 +1,6 @@
 <script>
 function getPhotosJson() { return <?=$photos?>; }
-function getMainPhotoId() { return <?=$main_photo?>; }
+function getMainPhoto() { return <?=$main_photo?>; }
 </script>
 
 <div ng-app='app' ng-controller="PortfolioAdminController">
@@ -9,7 +9,7 @@ function getMainPhotoId() { return <?=$main_photo?>; }
 
   <ul class="project-photos container">
     <li ng-repeat='photo in photos'
-        class='project-photo {{mainPhoto === photo.id ? "project-main-photo" : ""}}'>
+        class='project-photo {{mainPhoto.id === photo.id ? "project-main-photo" : ""}}'>
       <img src='{{ photo.url }}' />
       <input type="text" value='' ng-model='photo.title' />
       <button class="button button-small" ng-click='setMainPhoto($event, photo)'>Set as main photo</button>

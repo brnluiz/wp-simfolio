@@ -11,18 +11,18 @@ app.controller('PortfolioAdminController', ['$scope', function($scope) {
     jQuery('#project_photos').val($scope.photosJson);
   });
   $scope.$watch('mainPhoto', function() {
-    jQuery('#project_main_photo').val($scope.mainPhoto);
+    jQuery('#project_main_photo').val(JSON.stringify($scope.mainPhoto));
   });
 
   $scope.initParams = function() {
     $scope.photos     = getPhotosJson();
     $scope.photosJson = JSON.stringify($scope.photos);
-    $scope.mainPhoto  = getMainPhotoId();
+    $scope.mainPhoto  = getMainPhoto();
   }
   $scope.initParams();
 
   $scope.setMainPhoto = function($event, photo) {
-    $scope.mainPhoto = photo.id;
+    $scope.mainPhoto = photo;
     $event.preventDefault();
   }
 
