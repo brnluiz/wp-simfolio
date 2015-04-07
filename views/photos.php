@@ -21,9 +21,7 @@ function getMainPhotoObj() {
           class='project-photo {{mainPhoto.id === photo.id ? "project-main-photo" : ""}}'
           as-sortable-item >
         <div as-sortable-item-handle>
-          <div class='img-sizer'>
-            <img src='{{ photo.url }}' />
-          </div>
+          <img src='{{ photo.url }}' />
           <input type="text" class='title'   value='' ng-model='photo.title'   placeholder='Title'/>
           <input type="text" class='caption' value='' ng-model='photo.caption' placeholder='Caption'/>
           <button class="button button-small" ng-click='setMainPhoto($event, photo)'>Set as main photo</button>
