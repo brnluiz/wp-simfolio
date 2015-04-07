@@ -1,4 +1,4 @@
 - Renaming the titles on "Project Photos" is not saving it to the JSON
-- Implement: default photo size
-- Implement: photo reorder
+  - Limit the upload/choose photos to only photos of the post, so let the user only edit the photos at WP Media Uploader
 - Implement: pass data to Wordpress Media Manager
+- Implement: default photo size

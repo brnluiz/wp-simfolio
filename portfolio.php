@@ -27,11 +27,14 @@ class SimplePortfolio {
     // Load CSS
     wp_enqueue_style( 'bootstrap-style', plugins_url( 'css/grid.css', __FILE__ ) );
     wp_enqueue_style( 'wpamin-style', plugins_url( 'css/main.css', __FILE__ ) );
+    wp_enqueue_style( 'wpamin-sortable', plugins_url( 'bower_components/ng-sortable/dist/ng-sortable.min.css', __FILE__ ) );
+    wp_enqueue_style( 'wpamin-sortable-default', plugins_url( 'bower_components/ng-sortable/dist/ng-sortable.style.min.css', __FILE__ ) );
 
     // Load Angular
     wp_enqueue_script( 'angular', plugins_url( 'bower_components/angularjs/angular.js', __FILE__ ), array( 'jquery' ) );
 
     $js = array(
+      'sortable' => 'bower_components/ng-sortable/dist/ng-sortable.js',
       'app' => 'js/app.js',
       // "mainctrl" => 'app/scripts/controllers/main.js',
     );

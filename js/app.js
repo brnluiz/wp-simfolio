@@ -1,34 +1,43 @@
-var app = angular.module('app', []);
+var app = angular.module('app', ['ui.sortable']);
 
 app.controller('PortfolioAdminController', ['$scope', function($scope) {
 
-  $scope.mainPhoto  = null;
-  $scope.photos     = null;
-  $scope.photosJson = null;
-  $scope.file_frame = null;
+  $scope.postId     = jQuery('#post_ID').val();
+  $scope.oldPostId  = 0;
+  $scope.photos     = getPhotosObj();
+  $scope.mainPhoto  = getMainPhotoObj();
+  $scope.file_frame = null; // Will handle wp.media frame
 
-  $scope.$watch('photosJson', function() {
-    jQuery('#project_photos').val($scope.photosJson);
-  });
+  // As we can't use ng-submit, put the required data at hidden inputs for posterior saving
+  $scope.$watch('photos', function() {
+    var json = JSON.stringify($scope.photos);
+    jQuery('#project_photos').val(json);
+  }, true);
   $scope.$watch('mainPhoto', function() {
-    jQuery('#project_main_photo').val(JSON.stringify($scope.mainPhoto));
-  });
+    var json = JSON.stringify($scope.mainPhoto);
+    jQuery('#project_main_photo').val(json);
+  }, true);
 
-  $scope.initParams = function() {
-    $scope.photos     = getPhotosJson();
-    $scope.photosJson = JSON.stringify($scope.photos);
-    $scope.mainPhoto  = getMainPhoto();
-  }
-  $scope.initParams();
+  // Enables sortable items
+  $scope.dragControlListeners = {
+      itemMoved: function (event) {
+        console.log('itemMoved');
+      },
+      orderChanged: function(event) {
+        console.log('orderChanged');
+      },
+      containment: '#sortable-container'//optional param.
+  };
 
   $scope.setMainPhoto = function($event, photo) {
+    $event.preventDefault(); // Prevent default behavior of button
     $scope.mainPhoto = photo;
-    $event.preventDefault();
   }
 
   $scope.removePhoto = function($event, photo) {
-    $event.preventDefault();
+    $event.preventDefault(); // Prevent default behavior of button
 
+    // Search and remove deleted photo by photo.id
     for(var i = 0; i < $scope.photos.length; i++) {
         if($scope.photos[i].id == photo.id) {
             if($scope.mainPhoto != null && $scope.mainPhoto.id == photo.id)
@@ -41,10 +50,15 @@ app.controller('PortfolioAdminController', ['$scope', function($scope) {
     }
   }
 
+  // wp.media handler
   $scope.managePhotos = function() {
     if ( $scope.file_frame ) {
+      $scope.file_frame.uploader.uploader.param( 'post_id', $scope.postId );
       $scope.file_frame.open();
       return ;
+    } else {
+      $scope.oldPostId = wp.media.model.settings.post.id;
+      wp.media.model.settings.post.id = $scope.postId;
     }
 
     // Create the media frame, if it doesn't exists
@@ -52,21 +66,29 @@ app.controller('PortfolioAdminController', ['$scope', function($scope) {
       title: 'Project Photos',
       button: {
         text: 'Use photos',
+        reset: false
       },
       multiple: true,  // Set to true to allow multiple files to be selected
       library: {
-        type: 'image'
+        type: 'image',
+        uploadedTo: $scope.postId
       }
     });
 
+    console.log($scope.file_frame);
+
     // When an image is selected, run a callback.
     $scope.file_frame.on('select', function() {
+      // Get the selected data
       var selection = $scope.file_frame.state().get('selection');
-      var save_data = JSON.stringify(selection.toJSON());
-      $scope.photos = selection.toJSON();
-      $scope.photosJson = save_data;
 
+      // Save data at the controller $scope
+      $scope.photos = selection.toJSON();
+      $scope.mainPhoto = selection.toJSON()[0]; // Set the first photo as the mainPhoto
+
+      // Force $scope update
       $scope.$digest();
+      wp.media.model.settings.post.id = $scope.oldPostId;
     });
 
     // Finally, open the modal
