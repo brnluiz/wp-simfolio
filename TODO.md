@@ -1,4 +1,7 @@
-- Renaming the titles on "Project Photos" is not saving it to the JSON
-  - Limit the upload/choose photos to only photos of the post, so let the user only edit the photos at WP Media Uploader
-- Implement: pass data to Wordpress Media Manager
-- Implement: default photo size
+- Check: Limit the upload/choose photos to only photos of the post, so let the user only edit the photos at WP Media Uploader
+- Implement: pass data to wp.media for decent media management
+- Implement: default photo size for "Project Photos", independent of the photo size
+- Implement: YouTube and Vimeo videos
+- Implement: Settings page (to set, for example, if the media manager will only get photos from actual project or from the whole WP media)
+- Implement: actual taxonomy item at WP_List_Table manager
+- Implement: validation about "MainPhoto"
