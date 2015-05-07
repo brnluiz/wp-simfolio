@@ -12,8 +12,8 @@ function getMainPhotoObj() {
 </script>
 
 <div ng-app='app' ng-controller="PortfolioAdminController">
-  <input id="project_photos" type="hidden" name="project_photos" />
-  <input id="project_main_photo" type="hidden" name="project_main_photo" ng-model='mainPhoto' />
+  <input id="photos" type="hidden" name="photos" />
+  <input id="main_photo" type="hidden" name="main_photo" ng-model='mainPhoto' />
 
   <div id="sortable-container">
     <ul class="project-photos container" as-sortable="dragControlListeners" ng-model="photos" is-enabled="true">

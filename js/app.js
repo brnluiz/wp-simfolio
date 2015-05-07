@@ -11,11 +11,11 @@ app.controller('PortfolioAdminController', ['$scope', function($scope) {
   // As we can't use ng-submit, put the required data at hidden inputs for posterior saving
   $scope.$watch('photos', function() {
     var json = JSON.stringify($scope.photos);
-    jQuery('#project_photos').val(json);
+    jQuery('#photos').val(json);
   }, true);
   $scope.$watch('mainPhoto', function() {
     var json = JSON.stringify($scope.mainPhoto);
-    jQuery('#project_main_photo').val(json);
+    jQuery('#main_photo').val(json);
   }, true);
 
   // Enables sortable items
@@ -71,7 +71,7 @@ app.controller('PortfolioAdminController', ['$scope', function($scope) {
       multiple: true,  // Set to true to allow multiple files to be selected
       library: {
         type: 'image',
-        uploadedTo: $scope.postId
+        // uploadedTo: $scope.postId
       }
     });
 

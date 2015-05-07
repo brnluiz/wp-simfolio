@@ -1,15 +1,15 @@
 <?php
 /**
- * Plugin Name: Image Portfolio
+ * Plugin Name: Simfolio
  * Plugin URI: #
  * Version: 1.0
  * Author: Bruno Luiz
  * Author URI: http://brunoluiz.net
- * Description: A simple portfolio system for designers
+ * Description: A simple portfolio system
  * License: GPL2
  */
 
-class SimplePortfolio {
+class Simfolio {
 	function __construct() {
     add_action( 'init', array( $this, 'add_custom_taxonomies' ) );
 		add_action( 'init', array( $this, 'register_custom_post_type' ) );
@@ -17,8 +17,8 @@ class SimplePortfolio {
     add_action( 'add_meta_boxes', array( $this, 'register_meta_boxes' ) );
     add_action( 'save_post', array( $this, 'save_meta_boxes' ) );
 
-    add_filter( 'manage_edit-portfolio-project_columns', array( $this, 'add_table_columns' ) );
-    add_action( 'manage_portfolio-project_posts_custom_column', array( $this, 'output_table_columns_data'), 10, 2 );
+    add_filter( 'manage_edit-simfolio-project_columns', array( $this, 'add_table_columns' ) );
+    add_action( 'manage_simfolio-project_posts_custom_column', array( $this, 'output_table_columns_data'), 10, 2 );
 	}
 
   public function load_assets() {
@@ -55,7 +55,7 @@ class SimplePortfolio {
   }
 
   public function add_custom_taxonomies() {
-    register_taxonomy('skill', 'portfolio-project', array(
+    register_taxonomy('skill', 'simfolio-project', array(
       // Hierarchical taxonomy (like categories)
       'hierarchical' => true,
       // This array of options controls the labels displayed in the WordPress Admin UI
@@ -82,22 +82,22 @@ class SimplePortfolio {
   }
 
   public function register_custom_post_type() {
-    register_post_type( 'portfolio-project', array(
+    register_post_type( 'simfolio-project', array(
         'labels' => array(
-            'name'               => _x( 'Portfolio', 'post type general name', 'simple-portfolio' ),
-            'singular_name'      => _x( 'Project', 'post type singular name', 'simple-portfolio' ),
-            'menu_name'          => _x( 'Portfolio', 'admin menu', 'simple-portfolio' ),
-            'name_admin_bar'     => _x( 'Portfolio Project', 'add new on admin bar', 'simple-portfolio' ),
-            'add_new'            => _x( 'Add New Project', 'portfolio-project', 'simple-portfolio' ),
-            'add_new_item'       => __( 'Add New Project', 'simple-portfolio' ),
-            'new_item'           => __( 'New Project', 'simple-portfolio' ),
-            'edit_item'          => __( 'Edit Project', 'simple-portfolio' ),
-            'view_item'          => __( 'View Project', 'simple-portfolio' ),
-            'all_items'          => __( 'All Projects', 'simple-portfolio' ),
-            'search_items'       => __( 'Search Projects', 'simple-portfolio' ),
-            'parent_item_colon'  => __( 'Parent Projects:', 'simple-portfolio' ),
-            'not_found'          => __( 'No project found.', 'simple-portfolio' ),
-            'not_found_in_trash' => __( 'No project found in Trash.', 'simple-portfolio' ),
+            'name'               => _x( 'Portfolio projects', 'post type general name', 'simfolio' ),
+            'singular_name'      => _x( 'Project', 'post type singular name', 'simfolio' ),
+            'menu_name'          => _x( 'Simfolio', 'admin menu', 'simfolio' ),
+            'name_admin_bar'     => _x( 'Portfolio Project', 'add new on admin bar', 'simfolio' ),
+            'add_new'            => _x( 'Add New Project', 'simfolio-project', 'simfolio' ),
+            'add_new_item'       => __( 'Add New Project', 'simfolio' ),
+            'new_item'           => __( 'New Project', 'simfolio' ),
+            'edit_item'          => __( 'Edit Project', 'simfolio' ),
+            'view_item'          => __( 'View Project', 'simfolio' ),
+            'all_items'          => __( 'All Projects', 'simfolio' ),
+            'search_items'       => __( 'Search Projects', 'simfolio' ),
+            'parent_item_colon'  => __( 'Parent Projects:', 'simfolio' ),
+            'not_found'          => __( 'No project found.', 'simfolio' ),
+            'not_found_in_trash' => __( 'No project found in Trash.', 'simfolio' ),
         ),
 
         // Frontend
@@ -147,7 +147,7 @@ class SimplePortfolio {
         'id' => 'project-photos', // HTML ID
         'title' => 'Project Photos', // Meta box title
         'callback' => array( $this, 'photos_meta_box' ), // Function callback
-        'screens' => 'portfolio-project', // Enabled post types
+        'screens' => 'simfolio-project', // Enabled post types
         'context' => 'normal', // Context to show
         'priority' => 'high' // Priority compared to other meta boxes
       ),
@@ -155,7 +155,7 @@ class SimplePortfolio {
         'id' => 'project-description',
         'title' => 'Project Description',
         'callback' => array( $this, 'description_meta_box' ),
-        'screens' => 'portfolio-project',
+        'screens' => 'simfolio-project',
         'context' => 'normal',
         'priority' => 'high'
       )
@@ -174,7 +174,7 @@ class SimplePortfolio {
   * @param WP_Post $post WordPress Post object
   */
   function description_meta_box($post) {
-    $description = get_post_meta( $post->ID, '_project_description', true );
+    $description = get_post_meta( $post->ID, 'description', true );
 
     require_once 'views/description.php';
   }
@@ -186,8 +186,8 @@ class SimplePortfolio {
     // Load the scripts for upload images
     // wp_enqueue_script( 'photojs', plugins_url( 'js/photos.js', __FILE__ ), array('jquery','media-upload','thickbox') );
 
-    $photos     = get_post_meta( $post->ID, '_project_photos', true );
-    $main_photo = get_post_meta( $post->ID, '_project_main_photo', true );
+    $photos     = get_post_meta( $post->ID, 'photos', true );
+    $main_photo = get_post_meta( $post->ID, 'main_photo', true );
 
     // Load meta box plugin
     require_once "views/photos.php";
@@ -210,7 +210,7 @@ class SimplePortfolio {
     }
 
     // Check this is the Contact Custom Post Type
-    if ( 'portfolio-project' != $_POST['post_type'] ) {
+    if ( 'simfolio-project' != $_POST['post_type'] ) {
         return $post_id;
     }
 
@@ -220,13 +220,13 @@ class SimplePortfolio {
     }
 
     // OK to save meta data
-    $description = sanitize_text_field( $_POST['project_description'] );
-    $photos      = sanitize_text_field( $_POST['project_photos'] );
-    $main_photo  = sanitize_text_field( $_POST['project_main_photo'] );
+    $description = sanitize_text_field( $_POST['description'] );
+    $photos      = sanitize_text_field( $_POST['photos'] );
+    $main_photo  = sanitize_text_field( $_POST['main_photo'] );
 
-    update_post_meta( $post_id, '_project_description', $description );
-    update_post_meta( $post_id, '_project_photos', $photos );
-    update_post_meta( $post_id, '_project_main_photo', $main_photo );
+    update_post_meta( $post_id, 'description', $description );
+    update_post_meta( $post_id, 'photos', $photos );
+    update_post_meta( $post_id, 'main_photo', $main_photo );
   }
 
   /**
@@ -237,7 +237,7 @@ class SimplePortfolio {
   */
   function add_table_columns( $columns ) {
 
-      $columns['main_photo'] = __( 'Main Photo', 'simple-portfolio' );
+      $columns['main_photo'] = __( 'Main Photo', 'simfolio' );
 
       return $columns;
   }
@@ -249,7 +249,7 @@ class SimplePortfolio {
   * @param int $post_id Post ID
   */
   function output_table_columns_data( $columnName, $post_id ) {
-    $fieldJson = get_post_meta( $post_id, '_project_main_photo', true );
+    $fieldJson = get_post_meta( $post_id, 'main_photo', true );
     $field = json_decode($fieldJson);
 
     if ( 'main_photo' == $columnName ) {
@@ -262,4 +262,4 @@ class SimplePortfolio {
 }
 
 
-$simplePortfolio = new SimplePortfolio();
+$simplePortfolio = new Simfolio();
