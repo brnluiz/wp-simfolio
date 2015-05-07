@@ -224,7 +224,7 @@ class Simfolio {
     $photos      = sanitize_text_field( $_POST['photos'] );
     $main_photo  = sanitize_text_field( $_POST['main_photo'] );
 
-    update_post_meta( $post_id, 'description', $description[0] );
+    update_post_meta( $post_id, 'description', $description );
     update_post_meta( $post_id, 'photos', $photos );
     update_post_meta( $post_id, 'main_photo', $main_photo );
   }
@@ -273,6 +273,14 @@ class Simfolio {
   function get_description( $post_id ) {
     $field = get_post_meta( $post_id, 'description', false );
     return $field[0];
+  }
+
+  function get_projects( $args = null){
+    if($args == null)
+      $args = array( 'post_type' => 'simfolio-project' );
+    
+    $query = new WP_Query( $args );
+    return $query;
   }
 }
 

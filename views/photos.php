@@ -21,11 +21,17 @@ function getMainPhotoObj() {
           class='project-photo {{mainPhoto.id === photo.id ? "project-main-photo" : ""}}'
           as-sortable-item >
         <div as-sortable-item-handle>
-          <img src='{{ photo.url }}' />
-          <input type="text" class='title'   value='' ng-model='photo.title'   placeholder='Title'/>
-          <input type="text" class='caption' value='' ng-model='photo.caption' placeholder='Caption'/>
-          <button class="button button-small" ng-click='setMainPhoto($event, photo)'>Set as main photo</button>
-          <button class="button button-small" ng-click='removePhoto($event, photo)'>Remove Photo</button>
+          <div class='thumb'>
+            <img src='{{ photo.url }}' />
+          </div>
+          <div class='details'>
+            <input type="text" class='title'   value='' ng-model='photo.title'   placeholder='Title'/>
+            <input type="text" class='caption' value='' ng-model='photo.caption' placeholder='Caption'/>
+            <div class='buttons'>
+              <button class="button" ng-click='setMainPhoto($event, photo)'>Set as main photo</button>
+              <button class="button" ng-click='removePhoto($event, photo)'>Remove Photo</button>
+            </div>
+          </div>
         </div>
       </li>
 
