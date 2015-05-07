@@ -224,7 +224,7 @@ class Simfolio {
     $photos      = sanitize_text_field( $_POST['photos'] );
     $main_photo  = sanitize_text_field( $_POST['main_photo'] );
 
-    update_post_meta( $post_id, 'description', $description );
+    update_post_meta( $post_id, 'description', $description[0] );
     update_post_meta( $post_id, 'photos', $photos );
     update_post_meta( $post_id, 'main_photo', $main_photo );
   }
@@ -259,7 +259,22 @@ class Simfolio {
         echo $field;
     }
   }
+
+  function get_photos( $post_id ) {
+    $fieldJson = get_post_meta( $post_id, 'photos', true );
+    return json_decode($fieldJson, true);
+  }
+
+  function get_main_photo( $post_id ) {
+    $fieldJson = get_post_meta( $post_id, 'main_photo', true );
+    return json_decode($fieldJson, true);
+  }
+
+  function get_description( $post_id ) {
+    $field = get_post_meta( $post_id, 'description', false );
+    return $field[0];
+  }
 }
 
 
-$simplePortfolio = new Simfolio();
+$simfolio = new Simfolio();
