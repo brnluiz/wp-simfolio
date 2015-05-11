@@ -58,6 +58,7 @@ class Simfolio {
     register_taxonomy('skill', 'simfolio-project', array(
       // Hierarchical taxonomy (like categories)
       'hierarchical' => true,
+      'public' => true,
       // This array of options controls the labels displayed in the WordPress Admin UI
       'labels' => array(
         'name' => _x( 'Skills', 'taxonomy general name' ),
@@ -76,7 +77,7 @@ class Simfolio {
       'rewrite' => array(
         'slug' => 'skills', // This controls the base slug that will display before each term
         'with_front' => false, // Don't display the category base before "/locations/"
-        'hierarchical' => true // This will allow URL's like "/locations/boston/cambridge/"
+        'hierarchical' => true, // This will allow URL's like "/locations/boston/cambridge/"
       ),
     ));
   }
@@ -155,7 +156,7 @@ class Simfolio {
         'id' => 'project-description',
         'title' => 'Project Description',
         'callback' => array( $this, 'description_meta_box' ),
-        'screens' => 'simfolio-project',
+        'screens' => 'page',
         'context' => 'normal',
         'priority' => 'high'
       )
@@ -275,10 +276,11 @@ class Simfolio {
     return $field[0];
   }
 
-  function get_projects( $args = null){
-    if($args == null)
-      $args = array( 'post_type' => 'simfolio-project' );
-    
+  function get_projects( $args = null ){
+    if ($args == null)
+      $args = array();
+
+    $args['post_type'] = 'simfolio-project';
     $query = new WP_Query( $args );
     return $query;
   }
