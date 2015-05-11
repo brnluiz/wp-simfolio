@@ -156,7 +156,7 @@ class Simfolio {
         'id' => 'project-description',
         'title' => 'Project Description',
         'callback' => array( $this, 'description_meta_box' ),
-        'screens' => 'page',
+        'screens' => 'simfolio-project',
         'context' => 'normal',
         'priority' => 'high'
       )
