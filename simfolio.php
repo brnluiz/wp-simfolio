@@ -17,8 +17,8 @@ class Simfolio {
     add_action( 'add_meta_boxes', array( $this, 'register_meta_boxes' ) );
     add_action( 'save_post', array( $this, 'save_meta_boxes' ) );
 
-    add_filter( 'manage_edit-simfolio-project_columns', array( $this, 'add_table_columns' ) );
-    add_action( 'manage_simfolio-project_posts_custom_column', array( $this, 'output_table_columns_data'), 10, 2 );
+    add_filter( 'manage_edit-project_columns', array( $this, 'add_table_columns' ) );
+    add_action( 'manage_project_posts_custom_column', array( $this, 'output_table_columns_data'), 10, 2 );
 	}
 
   public function load_assets() {
@@ -55,7 +55,7 @@ class Simfolio {
   }
 
   public function add_custom_taxonomies() {
-    register_taxonomy('skill', 'simfolio-project', array(
+    register_taxonomy('skill', 'project', array(
       // Hierarchical taxonomy (like categories)
       'hierarchical' => true,
       'public' => true,
@@ -83,13 +83,13 @@ class Simfolio {
   }
 
   public function register_custom_post_type() {
-    register_post_type( 'simfolio-project', array(
+    register_post_type( 'project', array(
         'labels' => array(
             'name'               => _x( 'Portfolio projects', 'post type general name', 'simfolio' ),
             'singular_name'      => _x( 'Project', 'post type singular name', 'simfolio' ),
             'menu_name'          => _x( 'Simfolio', 'admin menu', 'simfolio' ),
             'name_admin_bar'     => _x( 'Portfolio Project', 'add new on admin bar', 'simfolio' ),
-            'add_new'            => _x( 'Add New Project', 'simfolio-project', 'simfolio' ),
+            'add_new'            => _x( 'Add New Project', 'project', 'simfolio' ),
             'add_new_item'       => __( 'Add New Project', 'simfolio' ),
             'new_item'           => __( 'New Project', 'simfolio' ),
             'edit_item'          => __( 'Edit Project', 'simfolio' ),
@@ -148,7 +148,7 @@ class Simfolio {
         'id' => 'project-photos', // HTML ID
         'title' => 'Project Photos', // Meta box title
         'callback' => array( $this, 'photos_meta_box' ), // Function callback
-        'screens' => 'simfolio-project', // Enabled post types
+        'screens' => 'project', // Enabled post types
         'context' => 'normal', // Context to show
         'priority' => 'high' // Priority compared to other meta boxes
       ),
@@ -156,7 +156,7 @@ class Simfolio {
         'id' => 'project-description',
         'title' => 'Project Description',
         'callback' => array( $this, 'description_meta_box' ),
-        'screens' => 'simfolio-project',
+        'screens' => 'project',
         'context' => 'normal',
         'priority' => 'high'
       )
@@ -211,7 +211,7 @@ class Simfolio {
     }
 
     // Check this is the Contact Custom Post Type
-    if ( 'simfolio-project' != $_POST['post_type'] ) {
+    if ( 'project' != $_POST['post_type'] ) {
         return $post_id;
     }
 
@@ -280,7 +280,7 @@ class Simfolio {
     if ($args == null)
       $args = array();
 
-    $args['post_type'] = 'simfolio-project';
+    $args['post_type'] = 'project';
     $query = new WP_Query( $args );
     return $query;
   }
