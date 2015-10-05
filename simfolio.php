@@ -254,7 +254,12 @@ class Simfolio {
     $field = json_decode($fieldJson);
 
     if ( 'main_photo' == $columnName ) {
-        echo '<img src="' . $field->sizes->thumbnail->url .'" width="'. $field->sizes->thumbnail->width . '" height="' . $field->sizes->thumbnail->height . '" />';
+        if (empty($field)) {
+            echo 'No photo was added';
+        }
+        else {
+            echo '<img src="' . $field->sizes->thumbnail->url .'" width="'. $field->sizes->thumbnail->width . '" height="' . $field->sizes->thumbnail->height . '" />';
+        }
     } else {
         // Output field
         echo $field;
